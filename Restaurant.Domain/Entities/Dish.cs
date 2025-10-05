@@ -7,4 +7,7 @@ public class Dish
     public string Description { get; set; } = default!;
     public decimal Price { get; set; }
 
+    public int RestaurantsEntityId { get; set; }
+    
+
 }

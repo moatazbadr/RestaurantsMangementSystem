@@ -1,6 +1,6 @@
 ﻿namespace Restaurant.Domain.Entities;
 
-public class Restaurant
+public class RestaurantsEntity
 {
     public int Id { get; set; }
     public string Name { get; set; } = default!;
