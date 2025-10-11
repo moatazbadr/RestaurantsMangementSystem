@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddServicesExtension(builder.Configuration);
+builder.Services.AddApplication();
 
 #endregion
 
@@ -20,6 +21,7 @@ var seeder = scoped.ServiceProvider.GetRequiredService<IRestaurantSeeder>();
 await seeder.SeedData();
 
 #endregion// Configure the HTTP request pipeline.
+
 #region Swagger implementation
 
 
@@ -29,6 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 } 
 #endregion
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
