@@ -19,4 +19,12 @@ public class RestaurantRepository : IRestaurantRepository
         var Restaurants = await _dbContext.restaurants.Include(r=>r.Dishes).ToListAsync();
         return Restaurants;
     }
+
+    public async Task<RestaurantsEntity> GetByIdAsync(int id)
+    {
+        var restaurant = await _dbContext.restaurants.FindAsync(id);
+       if (restaurant is not null)
+        return restaurant;
+        return null;
+    }
 }
