@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Domain.Entities;
 using Restaurants.Application.Restaurants;
+using Restaurants.Application.Restaurants.Dtos;
 
 namespace Restaurants.API.Controllers;
 
@@ -17,14 +18,14 @@ public class RestaurantsController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(RestaurantsEntity) ,200)]
+    [ProducesResponseType(typeof(RestaurantDto) ,200)]
     public async Task<IActionResult> getRestaurants()
     {
         var Restaurants = await _restaurantService.GetAll();
         return Ok(Restaurants);
     }
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(RestaurantsEntity),200)]
+    [ProducesResponseType(typeof(RestaurantDto),200)]
     public async Task<IActionResult> getRestaurant(int id)
     {
         var Restaurant = await _restaurantService.GetById(id);
