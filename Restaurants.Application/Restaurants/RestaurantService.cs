@@ -22,6 +22,15 @@ internal class RestaurantService : IRestaurantService
         _logger = logger;
     }
 
+    public async Task<RestaurantDto> CreateAsync(CreateRestaurantDto dto)
+    {
+        _logger.LogInformation("Creating a restaurant....");
+        var restaurantToCreate = _mapper.Map<RestaurantsEntity>(dto);
+        var CreatedRestaurant = await _restaurantRepository.CreateRestaurantAsync(restaurantToCreate);
+        var CreatedRestaurantDto = _mapper.Map<RestaurantDto>(CreatedRestaurant);
+        return CreatedRestaurantDto;
+    }
+
     public async Task<IEnumerable<RestaurantDto>> GetAll()
     {
         _logger.LogInformation("We are getting some restaurants");
@@ -39,4 +48,5 @@ internal class RestaurantService : IRestaurantService
        var restaurantDto =  _mapper.Map<RestaurantDto?>(restaurant);
         return restaurantDto;
     }
+
 }

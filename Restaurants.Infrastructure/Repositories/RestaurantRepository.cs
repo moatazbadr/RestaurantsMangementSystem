@@ -14,6 +14,13 @@ public class RestaurantRepository : IRestaurantRepository
         _dbContext = dbContext;
     }
 
+    public async Task<RestaurantsEntity> CreateRestaurantAsync(RestaurantsEntity restaurant)
+    {
+        _dbContext.restaurants.Add(restaurant);
+        await _dbContext.SaveChangesAsync();
+        return restaurant;
+    }
+
     public async Task<IEnumerable<RestaurantsEntity>> GetAllAsync()
     {
         var Restaurants = await _dbContext.restaurants.Include(r=>r.Dishes).ToListAsync();

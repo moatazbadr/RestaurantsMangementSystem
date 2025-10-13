@@ -33,5 +33,13 @@ public class RestaurantsController : ControllerBase
             return Ok(Restaurant);
         return NotFound();
     }
+    [HttpPost]
+    [ProducesResponseType(typeof(RestaurantDto), 201)]
+    public async Task<IActionResult> createRestaurant([FromBody] CreateRestaurantDto dto)
+    {
+        var createdRestaurant = await _restaurantService.CreateAsync(dto);
+        return CreatedAtAction(nameof(getRestaurant), new { id = createdRestaurant.Id }, createdRestaurant);
+                               
+    }
 
 }
