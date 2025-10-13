@@ -13,5 +13,6 @@ public static class ServiceCollectionServices
     public static void AddApplication (this IServiceCollection services)
     {
         services.AddScoped<IRestaurantService, RestaurantService>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }

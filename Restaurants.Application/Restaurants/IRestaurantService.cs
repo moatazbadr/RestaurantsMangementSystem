@@ -6,5 +6,5 @@ namespace Restaurants.Application.Restaurants;
 public interface IRestaurantService
 {
     Task<IEnumerable<RestaurantDto>> GetAll();
-    Task<RestaurantDto> GetById(int id);
+    Task<RestaurantDto?> GetById(int id);
 } 

@@ -22,7 +22,8 @@ public class RestaurantRepository : IRestaurantRepository
 
     public async Task<RestaurantsEntity> GetByIdAsync(int id)
     {
-        var restaurant = await _dbContext.restaurants.FindAsync(id);
+        var restaurant = await _dbContext.restaurants.Include(d=>d.Dishes)
+                                                     .FirstOrDefaultAsync(r=>r.Id==id);
        if (restaurant is not null)
         return restaurant;
         return null;

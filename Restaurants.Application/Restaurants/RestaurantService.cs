@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Repositories;
 using Restaurants.Application.Restaurants.Dtos;
@@ -11,9 +12,12 @@ internal class RestaurantService : IRestaurantService
     private readonly IRestaurantRepository _restaurantRepository;
     //We need Logging
     private readonly ILogger<RestaurantService> _logger;
+    private readonly IMapper _mapper;
 
-    public RestaurantService(IRestaurantRepository restaurantRepository, ILogger<RestaurantService> logger)
+    public RestaurantService(IRestaurantRepository restaurantRepository, ILogger<RestaurantService> logger ,IMapper mapper)
+
     {
+        _mapper = mapper;
         _restaurantRepository = restaurantRepository;
         _logger = logger;
     }
@@ -22,16 +26,17 @@ internal class RestaurantService : IRestaurantService
     {
         _logger.LogInformation("We are getting some restaurants");
         var restaurant = await _restaurantRepository.GetAllAsync();
-        var restaurantDtos = restaurant.Select(RestaurantDto.FromEntity);
+
+        var restaurantDtos = _mapper.Map<IEnumerable<RestaurantDto>>(restaurant);
 
         return restaurantDtos;
     }
 
-    public async Task<RestaurantDto> GetById(int id)
+    public async Task<RestaurantDto?> GetById(int id)
     {
         _logger.LogInformation("getting a restaurant");
         var restaurant = await _restaurantRepository.GetByIdAsync( id);
-       var restaurantDto = RestaurantDto.FromEntity(restaurant);
+       var restaurantDto =  _mapper.Map<RestaurantDto?>(restaurant);
         return restaurantDto;
     }
 }
