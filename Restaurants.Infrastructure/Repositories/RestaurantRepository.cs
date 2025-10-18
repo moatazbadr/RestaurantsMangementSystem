@@ -21,6 +21,8 @@ public class RestaurantRepository : IRestaurantRepository
         return restaurant;
     }
 
+    
+
     public async Task<IEnumerable<RestaurantsEntity>> GetAllAsync()
     {
         var Restaurants = await _dbContext.restaurants.Include(r=>r.Dishes).ToListAsync();
@@ -35,4 +37,14 @@ public class RestaurantRepository : IRestaurantRepository
         return restaurant;
         return null;
     }
+    public async Task DeleteRestaurantAsync(RestaurantsEntity entity)
+    {
+       
+        _dbContext.restaurants.Remove(entity);
+        await _dbContext.SaveChangesAsync();
+
+    }
+
+    public async Task SaveChangesAsync()
+    => await _dbContext.SaveChangesAsync();
 }
