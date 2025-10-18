@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Restaurant.Domain.Entities;
 using Restaurants.Application.Restaurants.Commands.RestaurantCommand;
+using Restaurants.Application.Restaurants.Commands.UpdateRestaurant;
 
 namespace Restaurants.Application.Restaurants.Dtos.MappingProflies
 {
@@ -23,9 +24,10 @@ namespace Restaurants.Application.Restaurants.Dtos.MappingProflies
                     City=src.City,
                     Street=src.Street,
                     PostalCode=src.PostalCode
-                }))
-               
-                ;
+                }));
+            //source -> target
+            CreateMap<UpdateRestaurantCommand , RestaurantsEntity>();
+
 
         }
     }
