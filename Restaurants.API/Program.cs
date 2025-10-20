@@ -17,8 +17,8 @@ builder.Services.AddApplication();
 builder.Host.UseSerilog((context,config) => {
     config
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning) // will only log Warning and above from Microsoft namespaces
-
-    .WriteTo.Console();
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information) // will log Information and above from EF Core namespaces
+    .WriteTo.Console(outputTemplate : "[{Timestamp:dd:MM:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}");
 
 });
 
@@ -39,6 +39,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 } 
 #endregion
+
+app.UseSerilogRequestLogging(); //will log all HTTP requests
+
 
 app.UseHttpsRedirection();
 

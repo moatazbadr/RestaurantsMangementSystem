@@ -26,7 +26,7 @@ public class CreateRestaurantCommandHandler : IRequestHandler<CreateRestaurantCo
     // Implementation goes here
     public async Task<RestaurantDto> Handle(CreateRestaurantCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Creating a restaurant....");
+        _logger.LogInformation("Creating a restaurant....{@Restaurant}",request);
         var restaurantToCreate = _mapper.Map<RestaurantsEntity>(request);
         var CreatedRestaurant = await _restaurantRepository.CreateRestaurantAsync(restaurantToCreate);
         var CreatedRestaurantDto = _mapper.Map<RestaurantDto>(CreatedRestaurant);
