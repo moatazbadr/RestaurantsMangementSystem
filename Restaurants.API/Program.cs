@@ -14,12 +14,9 @@ builder.Services.AddApplication();
 
 #endregion
 
-builder.Host.UseSerilog((context,config) => {
-    config
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning) // will only log Warning and above from Microsoft namespaces
-    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information) // will log Information and above from EF Core namespaces
-    .WriteTo.Console(outputTemplate : "[{Timestamp:dd:MM:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}");
 
+builder.Host.UseSerilog((context,config) => {
+    config.ReadFrom.Configuration(context.Configuration);
 });
 
 var app = builder.Build();
