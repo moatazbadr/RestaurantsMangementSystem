@@ -14,6 +14,14 @@ builder.Services.AddApplication();
 
 #endregion
 
+builder.Host.UseSerilog((context,config) => {
+    config
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning) // will only log Warning and above from Microsoft namespaces
+
+    .WriteTo.Console();
+
+});
+
 var app = builder.Build();
 #region Seeding data 
 var scoped = app.Services.CreateScope();
