@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddServicesExtension(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddScoped<ErrorMiddleWare>();
+builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 #endregion
 
 
@@ -40,6 +41,7 @@ app.UseSerilogRequestLogging(); //will log all HTTP requests
 
 
 app.UseMiddleware<ErrorMiddleWare>();
+app.UseMiddleware<RequestTimeLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 

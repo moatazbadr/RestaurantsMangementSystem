@@ -32,8 +32,7 @@ public class RestaurantsController : ControllerBase
     public async Task<IActionResult> getRestaurant(int id)
     {
         var Restaurant = await _mediator.Send(new GetRestaurantByIdQuery() { Id = id });
-        if (Restaurant is not null)
-            return Ok(Restaurant);
+        
         return NotFound();
     }
 
@@ -51,9 +50,8 @@ public class RestaurantsController : ControllerBase
     {
 
         // To be implemented
-        var Flag = await  _mediator.Send(new DeleteRestaurantCommand (id));
-        if (!Flag)
-            return NotFound();
+         await  _mediator.Send(new DeleteRestaurantCommand (id));
+        
 
         return NoContent(); //does not require any further action
     }
@@ -64,9 +62,8 @@ public class RestaurantsController : ControllerBase
         if (id != dto.Id)
             return BadRequest("Id from route does not match id from body");
         dto.Id = id;
-        var isUpdated = await _mediator.Send(dto);
-        if (!isUpdated)
-            return NotFound();
+         await _mediator.Send(dto);
+        
             
         return NoContent();
 

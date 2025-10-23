@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Restaurant.Domain.Exceptions;
 using Restaurant.Domain.Repositories;
 
 namespace Restaurants.Application.Restaurants.Commands.UpdateRestaurant;
 
-public class UpdateRestaurantCommandHandler :IRequestHandler<UpdateRestaurantCommand,bool>
+public class UpdateRestaurantCommandHandler :IRequestHandler<UpdateRestaurantCommand>
 
 {
     private readonly IRestaurantRepository _restaurantRepository;
@@ -19,22 +20,20 @@ public class UpdateRestaurantCommandHandler :IRequestHandler<UpdateRestaurantCom
         _mapper = mapper;
     }
 
-    public async Task<bool> Handle(UpdateRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateRestaurantCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Handling UpdateRestaurantCommand for Restaurant Id: {RestaurantId} with {Restaurant}", request.Id ,request);
         var restaurant = await _restaurantRepository.GetByIdAsync(request.Id);
         if (restaurant == null)
-        {
-            _logger.LogWarning("Restaurant with Id: {RestaurantId} not found", request.Id);
-            return false;
-        }
+                throw new NotFoundException($"Restaurant with ID {request.Id} not found.");
+      
         
         _mapper.Map(request, restaurant); // map the updated fields from the command to the entity
 
 
         await _restaurantRepository.SaveChangesAsync();
         _logger.LogInformation("Successfully updated Restaurant Id: {RestaurantId}", request.Id);
-        return true;
+      
 
 
     }
