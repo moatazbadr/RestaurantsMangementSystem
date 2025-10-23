@@ -1,5 +1,4 @@
 
-using Restaurants.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddServicesExtension(builder.Configuration);
 builder.Services.AddApplication();
-
+builder.Services.AddScoped<ErrorMiddleWare>();
 #endregion
 
 
@@ -39,6 +38,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging(); //will log all HTTP requests
 
+
+app.UseMiddleware<ErrorMiddleWare>();
 
 app.UseHttpsRedirection();
 
