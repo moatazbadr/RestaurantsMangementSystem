@@ -15,18 +15,20 @@ namespace Restaurants.API.MiddleWares
         {
             var stopwatch = Stopwatch.StartNew();
 
-            await next(context); // await the next middleware
+            await next(context);
 
             stopwatch.Stop();
-
             var elapsedMs = stopwatch.ElapsedMilliseconds;
 
-            _logger.LogInformation(
-                "Request {Method} {Path} executed in {ElapsedMilliseconds} ms",
-                context.Request.Method,
-                context.Request.Path,
-                elapsedMs
-            );
+            if (elapsedMs > 4000) // only log if request took more than 4 seconds
+            {
+                _logger.LogWarning(
+                    "⚠️ Slow Request Detected: {Method} {Path} took {ElapsedMilliseconds} ms",
+                    context.Request.Method,
+                    context.Request.Path,
+                    elapsedMs
+                );
+            }
         }
     }
 }
