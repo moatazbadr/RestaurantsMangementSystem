@@ -1,5 +1,8 @@
 
 
+
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,38 @@ var builder = WebApplication.CreateBuilder(args);
 #region Services collection
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("BearerAuth", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer"
+
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement() //key value pair
+    {
+        { 
+            new OpenApiSecurityScheme
+            {
+                 Reference = new OpenApiReference {
+                    Type= ReferenceType.SecurityScheme ,
+                    Id= "BearerAuth"
+                 }
+            }
+            ,
+            new List<string>()
+        }
+
+
+
+    }
+    );
+}
+
+);
+
 builder.Services.AddServicesExtension(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddScoped<ErrorMiddleWare>();
@@ -38,7 +72,7 @@ if (app.Environment.IsDevelopment())
 #endregion
 
 app.UseSerilogRequestLogging(); //will log all HTTP requests
-
+app.MapGroup("api/Accounts").MapIdentityApi<User>();
 
 app.UseMiddleware<ErrorMiddleWare>();
 app.UseMiddleware<RequestTimeLoggingMiddleware>();
