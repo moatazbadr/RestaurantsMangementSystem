@@ -9,5 +9,6 @@ namespace Restaurant.Domain.Repositories
         public Task<Dish> CreateDishAsync(Dish DishEntity);
         public Task DeleteAsync(Dish dish);
         public Task SaveChangesAsync();
+        public Task DeleteAllAsync(IEnumerable<Dish> dishes);
     }
 }
