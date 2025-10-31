@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Restaurant.Domain.Constants;
+using Restaurants.Application.User.Commands.AssignUserRole;
+using Restaurants.Application.User.Commands.UpdateUserDetails;
 
 namespace Restaurants.API.Controllers
 {
@@ -6,11 +11,29 @@ namespace Restaurants.API.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        [HttpPatch]
-        public async Task<IActionResult>UpdateUserDetails()
+        private readonly ILogger<IdentityController> _logger;
+        private readonly IMediator _mediator;
+        public IdentityController(ILogger<IdentityController> logger, IMediator mediator)
         {
-            // Implementation for updating user details goes here.
-            return Ok();
+            _logger = logger;
+            _mediator = mediator;
+        }
+
+        
+        [HttpPatch("User")]
+        [Authorize]
+        public async Task<IActionResult>UpdateUserDetails(UpdateUserDetailsCommand userDetailsCommand)
+        {
+            await _mediator.Send(userDetailsCommand);
+
+            return NoContent();
+        }
+        [HttpPost("UserRole")]
+        [Authorize(Roles = ValidUserRoles.AdminRole)]
+        public async Task<IActionResult>  AssignUserRole(AssignUserRoleCommand assignUserRoleCommand)
+        {
+            await _mediator.Send(assignUserRoleCommand);
+            return NoContent();
         }
 
     }

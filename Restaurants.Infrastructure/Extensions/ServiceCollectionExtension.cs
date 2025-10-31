@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Domain.Entities;
@@ -18,10 +19,13 @@ public static class ServiceCollectionExtension
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
         services.AddIdentityApiEndpoints<User>()
+           .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<RestaurantsDbContext>();
 
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
         services.AddScoped<IRestaurantRepository, RestaurantRepository>();
         services.AddScoped<IDishRepository, DishRepository>();
+        services.AddScoped<IUserRoleSeeder, UserRoleSeeder>();
+
     }
 }

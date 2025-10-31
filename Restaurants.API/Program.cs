@@ -20,8 +20,11 @@ builder.AddPresentation();
 var app = builder.Build();
 #region Seeding data 
 var scoped = app.Services.CreateScope();
-var seeder = scoped.ServiceProvider.GetRequiredService<IRestaurantSeeder>();
-await seeder.SeedData();
+var seeder1 = scoped.ServiceProvider.GetRequiredService<IRestaurantSeeder>();
+await seeder1.SeedData();
+var seeder2= scoped.ServiceProvider.GetRequiredService<IUserRoleSeeder>();
+await seeder2.Seed();
+
 
 #endregion// Configure the HTTP request pipeline.
 
@@ -36,7 +39,9 @@ if (app.Environment.IsDevelopment())
 #endregion
 
 app.UseSerilogRequestLogging(); //will log all HTTP requests
-app.MapGroup("api/Accounts").MapIdentityApi<User>();
+app.MapGroup("api/Accounts")
+    .WithTags("Identity")
+    .MapIdentityApi<User>();
 
 app.UseMiddleware<ErrorMiddleWare>();
 app.UseMiddleware<RequestTimeLoggingMiddleware>();

@@ -1,0 +1,10 @@
+﻿using MediatR;
+
+namespace Restaurants.Application.User.Commands.UpdateUserDetails
+{
+   public class UpdateUserDetailsCommand :IRequest
+    {
+        public DateOnly? DateOfbirth { get; set; }
+        public string? Nationality { get; set; }
+    }
+}
