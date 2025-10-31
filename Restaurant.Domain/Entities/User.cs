@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Restaurant.Domain.Entities
+namespace Restaurant.Domain.Entities;
+
+public class User : IdentityUser
 {
-    public class User : IdentityUser
-    {
+    public DateOnly ? DateOfbirth { get; set; }
+    public string ? Nationality { get; set; }
 
-    }
+
 }
