@@ -11,14 +11,15 @@ public class RestaurantUserClaimsPrincipalFactory(UserManager<User> userManager,
 {
     public override async Task<ClaimsPrincipal> CreateAsync(User user)
     {
-        var id =  await GenerateClaimsAsync(user);
+        var id = await GenerateClaimsAsync(user);
 
         if (!string.IsNullOrEmpty(user.Nationality))
-            id.AddClaim(new Claim("Nationality", user.Nationality)); //add custom claim to the token
-        if (user.DateOfbirth == null) 
-            id.AddClaim(new Claim("DateOfBirth", user.DateOfbirth!.Value.ToString("yy-mm-dd")));
+            id.AddClaim(new Claim("Nationality", user.Nationality));
 
-        return new ClaimsPrincipal (id);
+        if (user.DateOfbirth != null)
+            id.AddClaim(new Claim("DateOfBirth", user.DateOfbirth.Value.ToString("yyyy-MM-dd")));
+
+        return new ClaimsPrincipal(id);
     }
 
 }

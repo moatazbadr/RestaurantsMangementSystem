@@ -35,6 +35,6 @@ public static class ServiceCollectionExtension
             ;
         //added nationality policy required claim
         services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
-         
+
     }
 }
