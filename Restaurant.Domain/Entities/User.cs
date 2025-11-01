@@ -7,5 +7,6 @@ public class User : IdentityUser
     public DateOnly ? DateOfbirth { get; set; }
     public string ? Nationality { get; set; }
 
+    public List<RestaurantsEntity> Restaurants { get; set; } = [];
 
 }

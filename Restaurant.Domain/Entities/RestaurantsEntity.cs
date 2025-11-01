@@ -14,5 +14,8 @@ public class RestaurantsEntity
     public Address? address { get; set; }
     public List<Dish> Dishes { get; set; } = new List<Dish>();
 
+    public User owner { get; set; } = default!;
+    public string ownerId { get; set; } = default!;
+
 
 }
