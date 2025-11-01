@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Repositories;
+using Restaurants.Infrastructure.Authorization;
 using Restaurants.Infrastructure.Persistence;
 using Restaurants.Infrastructure.Repositories;
 using Restaurants.Infrastructure.Seeders;
@@ -20,12 +21,15 @@ public static class ServiceCollectionExtension
         });
         services.AddIdentityApiEndpoints<User>()
            .AddRoles<IdentityRole>()
+           .AddClaimsPrincipalFactory<RestaurantUserClaimsPrincipalFactory>()
             .AddEntityFrameworkStores<RestaurantsDbContext>();
 
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
         services.AddScoped<IRestaurantRepository, RestaurantRepository>();
         services.AddScoped<IDishRepository, DishRepository>();
         services.AddScoped<IUserRoleSeeder, UserRoleSeeder>();
+        services.AddAuthorizationBuilder().AddPolicy("Hasnationality", buider => buider.RequireClaim("Nationality"));
+        //added nationality policy required claim
 
     }
 }
