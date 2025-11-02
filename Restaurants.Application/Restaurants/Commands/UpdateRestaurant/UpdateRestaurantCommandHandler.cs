@@ -2,23 +2,18 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Restaurant.Domain.Exceptions;
+using Restaurant.Domain.Interfaces;
 using Restaurant.Domain.Repositories;
 
 namespace Restaurants.Application.Restaurants.Commands.UpdateRestaurant;
 
-public class UpdateRestaurantCommandHandler :IRequestHandler<UpdateRestaurantCommand>
+public class UpdateRestaurantCommandHandler(IRestaurantRepository _restaurantRepository,
+    ILogger<UpdateRestaurantCommandHandler> _logger,
+    IMapper _mapper ,    IRestaurantAuthorizationService _restaurantAuthorizationService
+    ) :IRequestHandler<UpdateRestaurantCommand>
 
 {
-    private readonly IRestaurantRepository _restaurantRepository;
-    private readonly ILogger<UpdateRestaurantCommandHandler> _logger;
-    private readonly IMapper _mapper ;
-
-    public UpdateRestaurantCommandHandler(IRestaurantRepository restaurantRepository, ILogger<UpdateRestaurantCommandHandler> logger, IMapper mapper)
-    {
-        _restaurantRepository = restaurantRepository;
-        _logger = logger;
-        _mapper = mapper;
-    }
+    
 
     public async Task Handle(UpdateRestaurantCommand request, CancellationToken cancellationToken)
     {
@@ -26,8 +21,13 @@ public class UpdateRestaurantCommandHandler :IRequestHandler<UpdateRestaurantCom
         var restaurant = await _restaurantRepository.GetByIdAsync(request.Id);
         if (restaurant == null)
                 throw new NotFoundException($"Restaurant with ID {request.Id} not found.");
-      
-        
+
+        if (!_restaurantAuthorizationService.Authorize(restaurant, RestaurantOperations.update))
+        {
+            _logger.LogWarning("Unauthorized attempt to delete restaurant with ID: {RestaurantId}", request.Id);
+            throw new ForbiddenExceptions("You do not have permission to delete this restaurant.");
+        }
+
         _mapper.Map(request, restaurant); // map the updated fields from the command to the entity
 
 

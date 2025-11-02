@@ -25,6 +25,12 @@ public class ErrorMiddleWare : IMiddleware
             await context.Response.WriteAsync(NotFoundException.Message);
 
         }
+        catch (ForbiddenExceptions forbiddenExceptions)
+        {
+            _logger.LogWarning(forbiddenExceptions, forbiddenExceptions.Message);
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync(forbiddenExceptions.Message);
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.Message);
