@@ -1,21 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Restaurant.Domain.Entities;
-using Restaurant.Domain.Repositories;
-using Restaurants.Infrastructure.Authorization;
-using Restaurants.Infrastructure.Authorization.Requirement;
-using Restaurants.Infrastructure.Persistence;
-using Restaurants.Infrastructure.Repositories;
-using Restaurants.Infrastructure.Seeders;
-
-namespace Restaurants.Infrastructure.Extensions;
+﻿namespace Restaurants.Infrastructure.Extensions;
 
 public static class ServiceCollectionExtension
 {
-    public static void AddServicesExtension(this IServiceCollection services ,IConfiguration configuration)
+    public static void AddServicesExtension(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<RestaurantsDbContext>(options =>
         {
@@ -35,6 +22,7 @@ public static class ServiceCollectionExtension
             ;
         //added nationality policy required claim
         services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
+        services.AddScoped<IRestaurantAuthorizationService, RestaurantAuthorizationService>();
 
     }
 }

@@ -1,0 +1,14 @@
+﻿global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Restaurant.Domain.Entities;
+global using Restaurant.Domain.Interfaces;
+global using Restaurant.Domain.Repositories;
+global using Restaurants.Infrastructure.Authorization;
+global using Restaurants.Infrastructure.Authorization.Requirement;
+global using Restaurants.Infrastructure.Authorization.Services;
+global using Restaurants.Infrastructure.Persistence;
+global using Restaurants.Infrastructure.Repositories;
+global using Restaurants.Infrastructure.Seeders;
