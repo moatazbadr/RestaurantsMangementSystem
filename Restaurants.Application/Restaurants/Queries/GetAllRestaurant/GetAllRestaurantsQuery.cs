@@ -1,10 +1,16 @@
 ﻿using MediatR;
+using Restaurants.Application.Common;
 using Restaurants.Application.Restaurants.Dtos;
 
 namespace Restaurants.Application.Restaurants.Queries.GetAllRestaurant
 {
-    public class GetAllRestaurantsQuery :IRequest <List<RestaurantDto>>
+    public class GetAllRestaurantsQuery :IRequest <PagesResults<RestaurantDto>>
     {
-        //طبعا هو كدا عشان مفيش في حاجه تتبعت مع الريكوست
+        public string ? searchPhrase { get; set; }
+
+        public int pageNumber { get; set; }
+
+        public int pageSize { get; set; }
+
     }
 }

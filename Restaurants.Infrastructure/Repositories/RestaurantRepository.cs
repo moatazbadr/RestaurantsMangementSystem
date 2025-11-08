@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities;
 using Restaurant.Domain.Repositories;
 using Restaurants.Infrastructure.Persistence;
@@ -28,7 +29,30 @@ public class RestaurantRepository : IRestaurantRepository
         var Restaurants = await _dbContext.restaurants.Include(r=>r.Dishes).ToListAsync();
         return Restaurants;
     }
+    public async Task<(IEnumerable<RestaurantsEntity>,int)> GetAllMatchingAsync(string? searchPhrase, int pageNumber, int pageSize)
+    {
+        var searchPhraseLower = searchPhrase?.ToLower();
 
+        var query = _dbContext.restaurants
+            .Include(r => r.Dishes)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchPhraseLower))
+        {
+            query = query.Where(r =>
+                (r.Name != null && r.Name.ToLower().Contains(searchPhraseLower)) ||
+                (r.Description != null && r.Description.ToLower().Contains(searchPhraseLower))
+            );
+        }
+        var totalCount = await query.CountAsync();
+        var restaurants = await query
+            .OrderBy(r => r.Id)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (restaurants,totalCount) ;
+    }
     public async Task<RestaurantsEntity> GetByIdAsync(int id)
     {
         var restaurant = await _dbContext.restaurants.Include(d=>d.Dishes)

@@ -25,9 +25,9 @@ public class RestaurantsController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(RestaurantDto), 200)]
-    public async Task<IActionResult> getRestaurants()
+    public async Task<IActionResult> getRestaurants([FromQuery]GetAllRestaurantsQuery restaurantsQuery)
     {
-        var Restaurants = await _mediator.Send(new GetAllRestaurantsQuery());
+        var Restaurants = await _mediator.Send(restaurantsQuery);
         return Ok(Restaurants);
     }
     [HttpGet("{id}")]

@@ -2,11 +2,12 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Restaurant.Domain.Repositories;
+using Restaurants.Application.Common;
 using Restaurants.Application.Restaurants.Dtos;
 
 namespace Restaurants.Application.Restaurants.Queries.GetAllRestaurant;
 
-public class GetAllRestaurantsQueryHandler : IRequestHandler<GetAllRestaurantsQuery, List<RestaurantDto>>
+public class GetAllRestaurantsQueryHandler : IRequestHandler<GetAllRestaurantsQuery, PagesResults<RestaurantDto>>
 {
     //we need an interfaces
     private readonly IRestaurantRepository _restaurantRepository;
@@ -21,13 +22,22 @@ public class GetAllRestaurantsQueryHandler : IRequestHandler<GetAllRestaurantsQu
         _mapper = mapper;
     }
 
-    public async Task<List<RestaurantDto>> Handle(GetAllRestaurantsQuery request, CancellationToken cancellationToken)
+    public async Task<PagesResults<RestaurantDto>> Handle(GetAllRestaurantsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("We are getting some restaurants");
-        var restaurant = await _restaurantRepository.GetAllAsync();
+      
+        //if (string.IsNullOrEmpty(request.searchPhrase))
+        //    {
+        //    var allRestaurants = await _restaurantRepository.GetAllAsync();
+        //    var allRestaurantDtos =  _mapper.Map<IEnumerable<RestaurantDto>>(allRestaurants).ToList();
+        //    return allRestaurantDtos;
+        //}
+        var ( restaurant ,totalCount) = await _restaurantRepository.GetAllMatchingAsync(request.searchPhrase,request.pageNumber,request.pageSize);
 
+        
         var restaurantDtos =  _mapper.Map<IEnumerable<RestaurantDto>>(restaurant).ToList();
+        var pagesResults = new PagesResults<RestaurantDto>(restaurantDtos, totalCount, request.pageNumber, request.pageSize);
 
-        return restaurantDtos;
+        return pagesResults;
     }
 }
