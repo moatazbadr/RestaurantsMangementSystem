@@ -32,7 +32,11 @@ public class GetAllRestaurantsQueryHandler : IRequestHandler<GetAllRestaurantsQu
         //    var allRestaurantDtos =  _mapper.Map<IEnumerable<RestaurantDto>>(allRestaurants).ToList();
         //    return allRestaurantDtos;
         //}
-        var ( restaurant ,totalCount) = await _restaurantRepository.GetAllMatchingAsync(request.searchPhrase,request.pageNumber,request.pageSize);
+        var ( restaurant ,totalCount) = await _restaurantRepository.GetAllMatchingAsync(request.searchPhrase,request.pageNumber
+            ,request.pageSize,
+            request.sortBy,
+          request.sortDirection
+            );
 
         
         var restaurantDtos =  _mapper.Map<IEnumerable<RestaurantDto>>(restaurant).ToList();
