@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using Restaurants.Application.Restaurants;
 using Restaurants.Application.User;
 
 namespace Restaurants.Application.Extension;
@@ -21,6 +20,6 @@ public static class ServiceCollectionServices
         services.AddScoped<IUserContext, UserContext>();
 
 
-        
+
     }
 }
